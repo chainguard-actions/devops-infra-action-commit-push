@@ -9,6 +9,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
 | v1.3.2 | [`v1.3.2`](https://github.com/chainguard-actions/devops-infra-action-commit-push/tree/v1.3.2) | [`9dbeef2`](https://github.com/devops-infra/action-commit-push/commit/9dbeef2fbc33d3949c568ddac2f3de0ee5010e85) |
+| v1.3.3 | [`v1.3.3`](https://github.com/chainguard-actions/devops-infra-action-commit-push/tree/v1.3.3) | [`0b42c7c`](https://github.com/devops-infra/action-commit-push/commit/0b42c7c1bf502dc2d7c9e8b9d9d7c174a48fe7c1) |
 
 ## Privacy
 
