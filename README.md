@@ -1,1 +1,15 @@
-# devops-infra-action-commit-push
+# devops-infra/action-commit-push
+
+Powerful GitHub Action for automatically committing and pushing changes back to your repository
+
+Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/devops-infra/action-commit-push](https://github.com/devops-infra/action-commit-push).
+
+## Versions
+
+| Version | Tag | Upstream commit |
+|---------|-----|-----------------|
+| v1.3.2 | [`v1.3.2`](https://github.com/chainguard-actions/devops-infra-action-commit-push/tree/v1.3.2) | [`9dbeef2`](https://github.com/devops-infra/action-commit-push/commit/9dbeef2fbc33d3949c568ddac2f3de0ee5010e85) |
+
+## Privacy
+
+This Action contacts Chainguard's licensing server to verify authorization. Connection metadata (IP address, GitHub repository identifier, timestamp, and any metadata encoded in the auth token) is transmitted to Chainguard, Inc. even if authorization is denied in accordance with our [Privacy Notice](https://www.chainguard.dev/legal/privacy-notice)
