@@ -1,0 +1,77 @@
+name: GitHub Action for committing changes to repository
+author: Krzysztof Szyper / ChristophShyper / shyper.pro
+description: Powerful GitHub Action for automatically committing and pushing changes back to your repository
+inputs:
+  github_token:
+    description: Personal Access Token for GitHub for pushing the code
+    required: true
+    default: ""
+  add_timestamp:
+    description: Whether to add timestamp to a new branch name
+    required: false
+    default: "false"
+  amend:
+    description: Whether to make amendment to the previous commit (--amend). Can be combined with commit_message to change the message.
+    required: false
+    default: "false"
+  commit_prefix:
+    description: Prefix added to commit message
+    required: false
+    default: ""
+  commit_message:
+    description: Commit message to set
+    required: false
+    default: ""
+  force:
+    description: Whether to use force push (--force). Use only when you need to overwrite remote changes. Potentially dangerous.
+    required: false
+    default: "false"
+  force_with_lease:
+    description: Whether to use force push with lease (--force-with-lease). Safer than force as it checks for remote changes.
+    required: false
+    default: "false"
+  base_branch:
+    description: Base branch name used for branch sync/reset (defaults to auto-detected main/master).
+    required: false
+    default: ""
+  reset_target_branch:
+    description: Whether to hard-reset target branch to origin/base_branch before committing.
+    required: false
+    default: "false"
+  allow_empty_commit:
+    description: Whether to allow creating an empty commit when there are no file changes.
+    required: false
+    default: "false"
+  fail_on_rebase_conflict:
+    description: Whether to fail when branch rebase onto base branch conflicts.
+    required: false
+    default: "true"
+  no_edit:
+    description: Whether to not edit commit message when using amend
+    required: false
+    default: "false"
+  organization_domain:
+    description: Name of GitHub Enterprise organization
+    required: false
+    default: github.com
+  target_branch:
+    description: Name of a new branch to push the code into (skipped when no changes and amend is false)
+    required: false
+    default: ""
+  repository_path:
+    description: Relative path under GITHUB_WORKSPACE to the checked-out repository (use when actions/checkout path is set)
+    required: false
+    default: "."
+outputs:
+  files_changed:
+    description: List of changed files
+  branch_name:
+    description: Name of the branch code was pushed into
+runs:
+  using: docker
+  image: docker://devopsinfra/action-commit-push@sha256:0b8941187b4e9e7eeb6ec835fba4ae7511ee57d7af2af295f886c33907cb61bb # v1.3.3
+  env:
+    GITHUB_TOKEN: ${{ inputs.github_token }}
+branding:
+  color: purple
+  icon: upload-cloud
