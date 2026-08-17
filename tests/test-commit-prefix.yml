@@ -1,0 +1,36 @@
+name: Test commit_prefix input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.email "test@example.com"
+          git config user.name "Test User"
+
+      # With no file changes, no target_branch, and no force, the action sets
+      # SKIP_BRANCH_CREATION=true and skips the push entirely. The commit_prefix
+      # input is accepted and the action runs successfully.
+      - id: action
+        uses: .
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_prefix: "[AUTO] "
+          commit_message: "commit with prefix"
+
+      - name: Assert branch_name output is set
+        env:
+          BRANCH: ${{ steps.action.outputs.branch_name }}
+        run: |
+          echo "branch_name: $BRANCH"
+          if [ -z "$BRANCH" ]; then
+            echo "FAIL: branch_name output is empty"
+            exit 1
+          fi
+          echo "PASS: branch_name=$BRANCH"

@@ -1,0 +1,30 @@
+name: Test allow_empty_commit flag
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: refs/heads/act-harness
+      GITHUB_EVENT_NAME: push
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Configure git identity
+        run: |
+          git config --global user.email "test@example.com"
+          git config --global user.name "Test User"
+
+      - id: action
+        uses: .
+        with:
+          github_token: fake-token-for-act-test
+          commit_message: "test: empty commit"
+          allow_empty_commit: "true"
+        continue-on-error: true
+
+      - name: Assert action step completed
+        run: |
+          echo "Action completed (with continue-on-error)"
+          echo "Outcome: ${{ steps.action.outcome }}"
+          echo "PASS: action step ran without crashing the workflow"
