@@ -69,7 +69,7 @@ outputs:
     description: Name of the branch code was pushed into
 runs:
   using: docker
-  image: docker://devopsinfra/action-commit-push@sha256:42d08d0fe03b03d17aaeee4e6b147c34d5c0cd461422c33e7f00117d338e398f # v1.3.4
+  image: docker://devopsinfra/action-commit-push:v1.3.4@sha256:42d08d0fe03b03d17aaeee4e6b147c34d5c0cd461422c33e7f00117d338e398f
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
 branding:

@@ -323,12 +323,12 @@ elif [[ "${SKIP_BRANCH_CREATION}" != "true" && ( -n ${FILES_CHANGED} || "${INPUT
 fi
 
 # Finish
-SAFE_BRANCH="$(printf '%s' "${BRANCH}" | tr -d '\n\r')"
 {
   echo "files_changed<<EOF"
   echo -e "${FILES_CHANGED}"
   echo "EOF"
-  echo "branch_name=${SAFE_BRANCH}"
+  safe_branch=$(printf '%s' "${BRANCH}" | tr -d '\n\r')
+  echo "branch_name=${safe_branch}"
 } >> "${GITHUB_OUTPUT}"
 if [[ ${RET_CODE} != "0" ]]; then
   echo -e "\n[ERROR] Check log for errors."
