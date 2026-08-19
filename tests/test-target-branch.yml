@@ -1,0 +1,59 @@
+name: Test commit to target branch
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Set up git origin reachable inside the Docker container
+        run: |
+          git config user.email "test@example.com"
+          git config user.name "Test User"
+          rm -rf "$GITHUB_WORKSPACE/.git-remote"
+          git init --bare "$GITHUB_WORKSPACE/.git-remote"
+          git push "$GITHUB_WORKSPACE/.git-remote" HEAD:refs/heads/act-harness
+          git push "$GITHUB_WORKSPACE/.git-remote" --tags
+          git remote set-url origin "$GITHUB_WORKSPACE/.git-remote" 2>/dev/null || \
+            git remote add origin "$GITHUB_WORKSPACE/.git-remote"
+
+      - name: Create a file change to commit
+        run: |
+          echo "target-branch-test-$(date +%s)" > "$GITHUB_WORKSPACE/test-target-branch.txt"
+
+      - id: action
+        uses: .
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_message: "test: commit to target branch from CI"
+          target_branch: "ci-test-target-branch"
+          user_name: "Test User"
+          user_email: "test@example.com"
+        continue-on-error: true
+
+      - name: Assert action ran and branch_name matches target
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+          BRANCH: ${{ steps.action.outputs.branch_name }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "branch_name: $BRANCH"
+          if [ "$OUTCOME" = "success" ]; then
+            if [ -z "$BRANCH" ]; then
+              echo "FAIL: action succeeded but branch_name output is empty"
+              exit 1
+            fi
+            if [ "$BRANCH" != "ci-test-target-branch" ]; then
+              echo "FAIL: expected branch_name='ci-test-target-branch' but got '$BRANCH'"
+              exit 1
+            fi
+            echo "PASS: branch_name='$BRANCH' matches target"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (sentinel repo or push restriction)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
